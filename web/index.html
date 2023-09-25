@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Chatroom</title>
+        <script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/hyperscript.org@0.9.11"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+        <div class="flex bg-black text-gray-300">
+            <div class="flex flex-col flex-1 h-screen">
+                <div class="flex-1 overflow-y-scroll" hx-ext="sse" hx-sse="connect:/htmx/chat">
+                    <div id="chatContainer" hx-sse="swap:chat" hx-swap="beforeend" class="p-8"></div>
+                </div>
+                <div class="flex flex-none">
+                    <input type="text" hx-post="/htmx/chat" name="chat" _="on htmx:afterRequest set my value to ''" class="flex-1 h-12 bg-zinc-900 m-2 rounded-md focus:outline-none p-4">
+                </div>
+            </div>
+        </div>
+        <script>
+            document.body.addEventListener('htmx:afterSwap', function(event) {
+                var chatContainer = document.getElementById('chatContainer');
+                chatContainer.lastElementChild.scrollIntoView();
+            });
+        </script>
+    </body>
+</html>
